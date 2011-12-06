@@ -1,0 +1,46 @@
+<html>
+<head>
+</head>
+<body>
+
+<h1>PathFinderJS.</h1>
+<p>
+PathFinderJS will accept an JSON Object and a String path for the property that you wish to access.</br>
+PathFinder will return the property of type matched in the path. That could be a string a subset of the object, an array of strings or Objects. See the examples below or run in a browser where console output is supported, to see the output of the pathfinder.html page in the console.
+</p>
+
+Example:
+<b>JSON Object</b>: var response = {"something":[{"_id":"4ed8f7744ff24c5f0c000001","properties":[{"sport":[{"fb":"one"}]}],"screen_name":"daithi44",},{"_id":"4ed8f840beed7e600c000001","properties":[{"sport":[{"fb":"two"}]}],"screen_name":"daithi44"},{"_id":"4ed9020eee56c9890c000001","properties":[{"sport":[{"fb":"three"}]}],"screen_name":"daithi44"}]};
+</br>
+<b>Path</b>: 'something[1].properties[0].sport[0].fb';
+</br></br>
+<b>Make Call to pf.pathFinder</b>
+<p><b>1.</b>
+pf.pathFinder(response,'something[1].properties[0].sport[0].fb');</b>
+ </br>returns '["one", "two", "three"]'
+ </p>
+<p><b>2.</b>
+ pf.pathFinder(response.something[2],'properties[0].sport[0].fb')</b>
+ </br>returns 'three'.
+</p>
+
+<p><b>3.</b>
+pf.pathFinder(response,'something');</b>
+ </br>returns an Array of 3 objects.
+</p>
+
+<script src="pathfinder.js"></script>
+<script>
+	var response = {"something":[{"_id":"4ed8f7744ff24c5f0c000001","properties":[{"sport":[{"fb":"one"}]}],"screen_name":"daithi44",},{"_id":"4ed8f840beed7e600c000001","properties":[{"sport":[{"fb":"two"}]}],"screen_name":"daithi44"},{"_id":"4ed9020eee56c9890c000001","properties":[{"sport":[{"fb":"three"}]}],"screen_name":"daithi44"}]};	
+
+var something0 = pf.pathFinder(response.something,'properties[0].sport[0].fb');
+console.log(something0);
+var something1 = pf.pathFinder(response.something[2],'properties[0].sport[0].fb');
+console.log(something1);
+var something2 = pf.pathFinder(response,'something');
+console.log(something2);
+var something3 = pf.pathFinder(response.something,'_id');
+console.log(something3);
+</script>
+</body>
+</html>
