@@ -1,88 +1,93 @@
 var pf = (function() {
+  'use strict';
 
-	var _pathFinder = function(data, path) {
-		var data_type = _toType(data);
+  var pathFinder = function(data, path) {
+		var data_type = this.toType(data), resp;
 		if (data_type === 'array') {
-			return _arrMultiplesObjects(data, path);
+			resp = this.arrMultiplesObjects(data, path);
 		} else if (data_type === 'object') {
-			return _objProperties(data, path);
+			resp = this.objProperties(data, path);
 		} else {
-			return '';
+			resp = '';
 		}
+    return resp;
 	};
 
-	var _toType = function(obj) {
+  pathFinder.prototype = {
+    toType: function(obj) {
 		return Object.prototype.toString.call(obj).match(/\s([a-z|A-Z]+)/)[1].toLowerCase();
-	};
+	},
 
-	var _arrMultiplesObjects = function(elements, template) {
-		var output = [];
-		for (var i = 0, len = elements.length; i < len; i++) {
-			output.push(_objProperties(elements[i], template));
+	arrMultiplesObjects: function(elements, template) {
+		var output = [], i, len;
+		for (i = 0, len = elements.length; i < len; i++) {
+			output.push(this.objProperties(elements[i], template));
 		}
 		return output;
-	};
+	},
 
-	var _objProperties = function(element, o) {
+	 objProperties: function(element, o) {
+      var resp;
 		if (o.indexOf('.') === -1 && o.indexOf('[') === -1) {
 			if (element.hasOwnProperty(o)) {
-				return element[o];
+				resp = element[o];
 			}else {
-				return '';
+				resp = '';
 			}
+
 		}else {
 			try {
-				return _objectPath(element, o);
+				resp = this.objectPath(element, o);
 			}
 			catch (ex) {
-				return '';
+				resp = '';
 			}
 		}
-	};
+      return resp;
+	},
 
-	var _objectPath = function(elObj, nstr) {
-		var obj = nstr.split('.');
-		var current = 0, res = elObj;
+	 objectPath: function(elObj, nstr) {
+		var obj = nstr.split('.'), pathArr, num, current = 0, res = elObj;
 		while (current < obj.length) {
-			res = _objectPathStep(res, _objectPathStepArr(obj[current]));
-			if (_toType(res) === 'array') {
-				var pathArr = obj[current].split('[');
-				if(pathArr.length > 1 ){
-					var num = +(pathArr[1].replace(']', ''));
+			res = this.objectPathStep(res, this.objectPathStepArr(obj[current]));
+			if (this.toType(res) === 'array') {
+				pathArr = obj[current].split('[');
+				if (pathArr.length > 1) {
+					num = +(pathArr[1].replace(']', ''));
 					res = res[num];
-				}else{
-					res = res;
-				}
-			}
+				}	}
 			current++;
 		}
 		return res;
-	};
+	},
 
-	var _objectPathStep = function(parent, child) {
+	objectPathStep: function(parent, child) {
+      var resp;
 		if (parent.hasOwnProperty(child)) {
-			return parent[child];
+			resp = parent[child];
 		} else {
-			return '';
+			resp = '';
 		}
-	};
+      return resp;
+	},
 
-	var _objectPathStepArr = function(path) {
-		var returnPath;
+	objectPathStepArr: function(path) {
+		var returnPath, pathArr;
 		if (path.indexOf('[') !== -1) {
-			var pathArr = path.split('[');
+			pathArr = path.split('[');
 			returnPath = pathArr[0];
 		} else {
 			returnPath = path;
 		}
 		return returnPath;
-	};
+	}
+  };
 
-return {
-version: '0.1'
+  return {
+    version: '0.1'
 , author: '@daithi44'
-, pathFinder: _pathFinder
-};
+, pathFinder: pathFinder
+  };
 
-})();
+}());
 
