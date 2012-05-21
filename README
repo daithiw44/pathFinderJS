@@ -20,6 +20,10 @@ returns 'three'.
 returns an Array of 3 objects.
 
 
+When would you use it?
+
+If you were using a template engine and you wanted to use the full object path to a property, pathFinderJS would do the work of associating 'something[1].properties[0].sport[0].fb' with the object available to the Template.
+
 Try out Examples:
 
 Include on the Page.
